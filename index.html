@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess Game 80s</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at center, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      border: 2px solid #ff00ff;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+      background: rgba(0,0,0,0.6);
+      width: 300px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #fff, 0 0 20px #00ffff;
+    }
+
+    .output {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      min-height: 40px;
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* Animações */
+    .shake { animation: shake 0.4s; }
+    .pulse { animation: pulse 0.6s; }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 Guess</h1>
+    <p>Chute um número de 1 a 100</p>
+    <input type="number" id="chute" placeholder="Digite aqui">
+    <button onclick="verificar()">Enviar</button>
+    <button onclick="resetar()">Resetar</button>
+    <div class="output" id="resultado"></div>
+    <div class="info" id="tentativas"></div>
+  </div>
+
+  <script>
+    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+    let tentativas = 0;
+
+    function animar(elemento, classe) {
+      elemento.classList.remove('shake', 'pulse');
+      void elemento.offsetWidth;
+      elemento.classList.add(classe);
+    }
+
+    function verificar() {
+      const input = document.getElementById('chute');
+      const resultado = document.getElementById('resultado');
+      const info = document.getElementById('tentativas');
+      const chute = input.value;
+
+      if (!chute) {
+        resultado.innerText = '⚠️ Digite um número válido!';
+        resultado.style.color = 'yellow';
+        animar(resultado, 'shake');
+        return;
+      }
+
+      tentativas++;
+
+      if (chute > numeroSecreto) {
+        resultado.innerText = '🔻 Muito alto!';
+        resultado.style.color = 'red';
+        animar(resultado, 'shake');
+      } else if (chute < numeroSecreto) {
+        resultado.innerText = '🔺 Muito baixo!';
+        resultado.style.color = 'red';
+        animar(resultado, 'shake');
+      } else {
+        resultado.innerText = '🎉 Acertou!';
+        resultado.style.color = 'lime';
+        animar(resultado, 'pulse');
+      }
+
+      info.innerText = `Tentativas: ${tentativas}`;
+      input.value = '';
+    }
+
+    function resetar() {
+      numeroSecreto = Math.floor(Math.random() * 100) + 1;
+      tentativas = 0;
+      document.getElementById('resultado').innerText = '';
+      document.getElementById('tentativas').innerText = '';
+    }
+  </script>
+</body>
+</html>
